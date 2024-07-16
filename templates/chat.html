@@ -3,19 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Application</title>
+    <title>Chat</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
 </head>
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            <span>Welcome to the Chat</span>
+            <h1>Welcome, {{ username }}</h1>
         </div>
-        <div id="chat" class="chat-messages"></div>
-        <div class="chat-input">
-            <input id="message" type="text" placeholder="Enter your message...">
-            <button id="send">Send</button>
+        <div class="chat-main">
+            <div class="chat-sidebar">
+                <div class="search-container">
+                    <div class="form__group field">
+                        <input type="text" class="form__field" placeholder="Username" id="search-user" required>
+                        <label for="search-user" class="form__label">Search user</label>
+                    </div>
+                    <button id="search-button" class="button-30">Search</button>
+                </div>
+                <div id="user-list"></div>
+                <div class="chat-requests">
+                    <h3>Chat Requests</h3>
+                    <div id="chat-requests"></div>
+                </div>
+                <div class="friends-list">
+                    <h3>Friends</h3>
+                    <div id="chat-list"></div>
+                </div>
+            </div>
+            <div class="chat-content">
+                <div id="chat" class="chat-messages"></div>
+                <div class="chat-input">
+                    <input type="text" id="recipient" placeholder="Recipient" style="display: none;">
+                    <input type="text" id="message" placeholder="Type a message">
+                    <button id="send">Send</button>
+                </div>
+            </div>
         </div>
     </div>
+    <script>
+        var currentUser = "{{ username }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
 </body>
 </html>

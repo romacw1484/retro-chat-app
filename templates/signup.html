@@ -8,6 +8,15 @@
 </head>
 <body>
     <div class="signup-container">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+              {% for message in messages %}
+                <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
         <form method="POST" action="{{ url_for('signup') }}">
             <h2>Sign Up</h2>
             <div class="form__group field">
