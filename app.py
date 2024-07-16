@@ -186,8 +186,8 @@ def handle_message(msg):
         emit('message', f"{sender_username}: {message}", room=request.sid)
     except ValueError:
         print("Invalid message format")
-
+    
 if __name__ == '__main__':
-    db.create_all()
-    port = int(os.environ.get('PORT', 5001))
-    socketio.run(app, debug=True, host='0.0.0.0', port=port)
+db.create_all()
+port = int(os.environ.get('PORT', 5001))
+socketio.run(app, debug=True, host='0.0.0.0', port=port, allow_unsafe_werkzeug=True)

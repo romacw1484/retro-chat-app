@@ -3,4 +3,5 @@ Flask-SQLAlchemy==2.5.1
 SQLAlchemy==1.4.39
 Werkzeug==2.1.2
 python-dotenv
-flask-socketio
+flask_socketio
+gunicorn

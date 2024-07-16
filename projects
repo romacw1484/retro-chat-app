@@ -34,9 +34,9 @@ FILE_NAME_2=0;HTML;0;EUTF-8;1;1;0;%2Fhome%2Fwromac%2Fchat-app%2Ftemplates%2Fsign
 FILE_NAME_3=1947;HTML;0;EUTF-8;1;1;0;%2Fhome%2Fwromac%2Fchat-app%2Ftemplates%2Fchat.html;0;4
 FILE_NAME_4=0;CSS;0;EUTF-8;1;1;0;%2Fhome%2Fwromac%2Fchat-app%2Fstatic%2Fcss%2Fsignup.css;0;4
 FILE_NAME_5=6607;CSS;0;EUTF-8;1;1;0;%2Fhome%2Fwromac%2Fchat-app%2Fstatic%2Fcss%2Fchat.css;0;4
-FILE_NAME_6=351;Python;0;EUTF-8;1;1;0;%2Fhome%2Fwromac%2Fchat-app%2Fapp.py;0;4
+FILE_NAME_6=7383;Python;0;EUTF-8;1;1;0;%2Fhome%2Fwromac%2Fchat-app%2Fapp.py;0;4
 FILE_NAME_7=0;CSS;0;EUTF-8;1;1;0;%2Fhome%2Fwromac%2Fchat-app%2Fstatic%2Fcss%2Flogin.css;0;4
-FILE_NAME_8=101;None;0;EUTF-8;1;1;0;%2Fhome%2Fwromac%2Fchat-app%2Frequirements.txt;0;4
+FILE_NAME_8=110;None;0;EUTF-8;1;1;0;%2Fhome%2Fwromac%2Fchat-app%2Frequirements.txt;0;4
 
 [VTE]
 last_dir=/home/wromac/chat-app
