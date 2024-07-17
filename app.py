@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 import os
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room, leave_room
 
 # Load environment variables from .env file
 load_dotenv()
@@ -168,27 +168,40 @@ def get_messages():
         return jsonify(message_list)
     return jsonify({'status': 'User not found'})
 
+@socketio.on('connect')
+def handle_connect():
+    user_id = session.get('user_id')
+    if user_id:
+        username = session.get('username')
+        join_room(user_id)
+        emit('status', {'msg': f'{username} has entered the room.'}, room=user_id)
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    user_id = session.get('user_id')
+    if user_id:
+        username = session.get('username')
+        leave_room(user_id)
+        emit('status', {'msg': f'{username} has left the room.'}, room=user_id)
+
 @socketio.on('message')
-def handle_message(msg):
-    try:
-        recipient, message = msg.split(': ', 1)
-        sender_username = session['username']
-        # Save the message to the database
-        sender_id = session['user_id']
-        receiver = User.query.filter_by(username=recipient).first()
-        if receiver:
-            new_message = Message(sender_id=sender_id, receiver_id=receiver.id, content=message)
-            db.session.add(new_message)
-            db.session.commit()
-        # Send the message to the recipient's chat window
-        emit('message', f"{sender_username}: {message}", to=recipient)
-        # Send the message back to the sender's chat window
-        emit('message', f"{sender_username}: {message}", room=request.sid)
-    except ValueError:
-        print("Invalid message format")
+def handle_message(data):
+    sender_id = session.get('user_id')
+    sender_username = session.get('username')
+    recipient_username = data.get('recipient')
+    message = data.get('message')
     
+    receiver = User.query.filter_by(username=recipient_username).first()
+    if receiver:
+        new_message = Message(sender_id=sender_id, receiver_id=receiver.id, content=message)
+        db.session.add(new_message)
+        db.session.commit()
+        
+        # Emit the message to both sender and receiver rooms
+        emit('message', {'username': sender_username, 'message': message}, room=receiver.id)
+        emit('message', {'username': sender_username, 'message': message}, room=sender_id)
+
 if __name__ == '__main__':
     db.create_all()
     port = int(os.environ.get('PORT', 5001))
     socketio.run(app, debug=True, host='0.0.0.0', port=port)
-
