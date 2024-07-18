@@ -14,7 +14,7 @@ body {
     height: 90%;
     margin: 50px auto;
     padding: 20px;
-    border: 4px solid #8a8888;
+    border: 8px solid #8a8888;
     border-radius: 5px;
     background-color: #d8d5d5;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -33,6 +33,8 @@ body {
     display: flex;
     flex: 1;
     border: 4px solid #000000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
 }
 
 .chat-sidebar {
@@ -115,12 +117,12 @@ body {
     background-color: #FCFCFD;
     border-radius: 4px;
     border-width: 0;
-    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
     box-sizing: border-box;
     color: #36395A;
     cursor: pointer;
     display: inline-flex;
-    font-family: "JetBrains Mono",monospace;
+    font-family: "JetBrains Mono", monospace;
     height: 48px;
     justify-content: center;
     line-height: 1;
@@ -131,14 +133,15 @@ body {
     position: relative;
     text-align: left;
     text-decoration: none;
-    transition: box-shadow .15s,transform .15s;
+    transition: box-shadow .15s, transform .15s;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
     white-space: nowrap;
-    will-change: box-shadow,transform;
+    will-change: box-shadow, transform;
     font-size: 18px;
     margin-left: 10px;
+    font-weight: bold;
 }
 
 .button-30:focus {
@@ -224,7 +227,7 @@ body {
     border-radius: 3px;
     border: 1px solid #ccc;
     overflow-y: auto;
-    margin-bottom: 10px;
+    margin-bottom: 0; /* Remove the bottom margin */
 }
 
 .chat-message {
@@ -247,24 +250,27 @@ body {
 
 .chat-input {
     display: flex;
-    margin-top: 10px;
+    border: 1px solid #000; /* Add border to the input container */
+    border-radius: 5px; /* Add border radius to the input container */
 }
 
 .chat-input input {
     flex: 1;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px 0 0 3px;
-    border-right: none;
+    border: none; /* Remove individual input border */
+    border-radius: 5px 0 0 5px; /* Adjust the radius to round the left corners */
+    outline: none; /* Remove the outline */
 }
 
 .chat-input button {
     padding: 10px;
-    border: 3px solid #000000;
-    border-radius: 0 3px 3px 0;
+    border: none; /* Remove individual button border */
+    border-radius: 0 5px 5px 0; /* Adjust the radius to round the right corners */
     background-color: #11998e;
     color: white;
     cursor: pointer;
+    font-family: 'Courier New', Courier, monospace; /* Old-school font */
+    font-weight: bold;
 }
 
 .chat-input button:hover {
