@@ -2,27 +2,26 @@ document.addEventListener('DOMContentLoaded', (event) => {
     var socket = io.connect('http://' + document.domain + ':' + location.port);
 
     socket.on('connect', () => {
-        socket.send('User has connected!');
+        socket.emit('join', { 'username': currentUser });
     });
 
-    socket.on('message', (msg) => {
+    socket.on('message', (data) => {
         let messages = document.getElementById('chat');
         let message = document.createElement('div');
         message.className = 'chat-message';
 
-        let [username, ...messageText] = msg.split(': ');
         let usernameSpan = document.createElement('span');
         usernameSpan.className = 'username';
-        usernameSpan.textContent = username + ': ';
+        usernameSpan.textContent = data.username + ': ';
         
         let messageSpan = document.createElement('span');
         messageSpan.className = 'message';
-        messageSpan.textContent = messageText.join(': ');
+        messageSpan.textContent = data.message;
 
         message.appendChild(usernameSpan);
         message.appendChild(messageSpan);
 
-        if (username === currentUser) {
+        if (data.username === currentUser) {
             message.classList.add('sent');
         }
 
@@ -36,8 +35,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let recipient = recipientInput.value;
         let message = messageInput.value;
         if (recipient) {
-            socket.send(recipient + ': ' + message);
-            saveMessage(recipient, message);
+            socket.emit('message', { 'recipient': recipient, 'message': message });
         } else {
             alert('Please select a chat recipient');
         }
@@ -202,16 +200,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             messagesDiv.scrollTop = messagesDiv.scrollHeight;  // Auto-scroll to the bottom
         });
         document.getElementById('chat-header').textContent = `Chatting with ${username}`;
-    }
-
-    function saveMessage(recipient, message) {
-        fetch('/save_message', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ recipient: recipient, message: message })
-        });
     }
 
     // Initial load
