@@ -1,10 +1,13 @@
 document.addEventListener('DOMContentLoaded', (event) => {
+    // Connect to the Socket.IO server
     var socket = io.connect('http://' + document.domain + ':' + location.port);
 
+    // When the user connects, emit a join event with the username
     socket.on('connect', () => {
         socket.emit('join', { 'username': currentUser });
     });
 
+    // Listen for incoming messages and display them in the chat box
     socket.on('message', (data) => {
         let messages = document.getElementById('chat');
         let message = document.createElement('div');
@@ -29,13 +32,30 @@ document.addEventListener('DOMContentLoaded', (event) => {
         messages.scrollTop = messages.scrollHeight;  // Auto-scroll to the bottom
     });
 
-    document.getElementById('send').onclick = () => {
+    // Function to send a message
+    function sendMessage() {
         let messageInput = document.querySelector('.chat-input input');
         let message = messageInput.value;
-        socket.emit('message', { 'recipient': selectedChatUser, 'message': message });
-        messageInput.value = '';
-    };
+        let recipient = document.querySelector('.chat-header').textContent.split(' ')[2]; // Adjust this line as per your implementation
+        if (recipient && message) {
+            socket.emit('message', { 'recipient': recipient, 'message': message });
+            messageInput.value = '';
+        } else {
+            alert('Please select a chat recipient and type a message.');
+        }
+    }
 
+    // Send a message when the send button is clicked
+    document.querySelector('.chat-input button').onclick = sendMessage;
+
+    // Send a message when the enter key is pressed
+    document.querySelector('.chat-input input').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    // Search for users when the search button is clicked
     document.getElementById('search-button').onclick = () => {
         let username = document.getElementById('search-user').value;
         fetch('/search_user', {
@@ -74,6 +94,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     };
 
+    // Function to send a chat request
     function sendChatRequest(userId) {
         fetch('/send_chat_request', {
             method: 'POST',
@@ -89,6 +110,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
+    // Get chat requests and display them
     function getChatRequests() {
         fetch('/get_chat_requests')
         .then(response => response.json())
@@ -114,6 +136,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
+    // Accept a chat request
     function acceptChatRequest(senderId) {
         fetch('/accept_chat_request', {
             method: 'POST',
@@ -130,6 +153,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
+    // Reject a chat request
     function rejectChatRequest(senderId) {
         fetch('/reject_chat_request', {
             method: 'POST',
@@ -145,6 +169,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
+    // Get accepted chats and display them
     function getAcceptedChats() {
         fetch('/get_accepted_chats')
         .then(response => response.json())
@@ -161,8 +186,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
+    // Select a chat and load messages
     function selectChat(username) {
-        selectedChatUser = username;
+        document.getElementById('recipient').value = username;
+        document.getElementById('recipient').readOnly = true;
         document.getElementById('chat').innerHTML = '';  // Clear previous messages
         fetch('/get_messages', {
             method: 'POST',
@@ -195,10 +222,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('chat-header').textContent = `Chatting with ${username}`;
     }
 
-    var selectedChatUser = null;
-
     // Initial load
     getChatRequests();
     getAcceptedChats();
 });
+
 /* last update : 7/17 1:39pm */ 
