@@ -1,13 +1,10 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    // Connect to the Socket.IO server
     var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-    // When the user connects, emit a join event with the username
     socket.on('connect', () => {
         socket.emit('join', { 'username': currentUser });
     });
 
-    // Listen for incoming messages and display them in the chat box
     socket.on('message', (data) => {
         let messages = document.getElementById('chat');
         let message = document.createElement('div');
@@ -32,30 +29,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
         messages.scrollTop = messages.scrollHeight;  // Auto-scroll to the bottom
     });
 
-    // Function to send a message
-    function sendMessage() {
-        let messageInput = document.querySelector('.chat-input input');
+    document.getElementById('send').onclick = () => {
+        let recipientInput = document.getElementById('recipient');
+        let messageInput = document.getElementById('message');
+        let recipient = recipientInput.value;
         let message = messageInput.value;
-        let recipient = document.querySelector('.chat-header').textContent.split(' ')[2]; // Adjust this line as per your implementation
-        if (recipient && message) {
+        if (recipient) {
             socket.emit('message', { 'recipient': recipient, 'message': message });
-            messageInput.value = '';
         } else {
-            alert('Please select a chat recipient and type a message.');
+            alert('Please select a chat recipient');
         }
-    }
+        messageInput.value = '';
+    };
 
-    // Send a message when the send button is clicked
-    document.querySelector('.chat-input button').onclick = sendMessage;
-
-    // Send a message when the enter key is pressed
-    document.querySelector('.chat-input input').addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            sendMessage();
-        }
-    });
-
-    // Search for users when the search button is clicked
     document.getElementById('search-button').onclick = () => {
         let username = document.getElementById('search-user').value;
         fetch('/search_user', {
@@ -94,7 +80,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     };
 
-    // Function to send a chat request
     function sendChatRequest(userId) {
         fetch('/send_chat_request', {
             method: 'POST',
@@ -110,7 +95,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
-    // Get chat requests and display them
     function getChatRequests() {
         fetch('/get_chat_requests')
         .then(response => response.json())
@@ -136,7 +120,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
-    // Accept a chat request
     function acceptChatRequest(senderId) {
         fetch('/accept_chat_request', {
             method: 'POST',
@@ -153,7 +136,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
-    // Reject a chat request
     function rejectChatRequest(senderId) {
         fetch('/reject_chat_request', {
             method: 'POST',
@@ -169,7 +151,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
-    // Get accepted chats and display them
     function getAcceptedChats() {
         fetch('/get_accepted_chats')
         .then(response => response.json())
@@ -186,7 +167,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
-    // Select a chat and load messages
     function selectChat(username) {
         document.getElementById('recipient').value = username;
         document.getElementById('recipient').readOnly = true;
@@ -226,5 +206,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
     getChatRequests();
     getAcceptedChats();
 });
-
 /* last update : 7/17 1:39pm */ 
