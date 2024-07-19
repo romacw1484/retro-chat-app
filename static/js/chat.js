@@ -1,48 +1,32 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     var socket = io.connect('http://' + document.domain + ':' + location.port);
 
+    // Join the chat room when connected
     socket.on('connect', () => {
         socket.emit('join', { 'username': currentUser });
     });
 
+    // Handle incoming messages
     socket.on('message', (data) => {
-        let messages = document.getElementById('chat');
-        let message = document.createElement('div');
-        message.className = 'chat-message';
-
-        let usernameSpan = document.createElement('span');
-        usernameSpan.className = 'username';
-        usernameSpan.textContent = data.username + ': ';
-        
-        let messageSpan = document.createElement('span');
-        messageSpan.className = 'message';
-        messageSpan.textContent = data.message;
-
-        message.appendChild(usernameSpan);
-        message.appendChild(messageSpan);
-
-        if (data.username === currentUser) {
-            message.classList.add('sent');
-        }
-
-        messages.appendChild(message);
-        messages.scrollTop = messages.scrollHeight;  // Auto-scroll to the bottom
+        displayMessage(data.username, data.message);
     });
 
+    // Send a message when the send button is clicked
     document.getElementById('send').onclick = () => {
-        let messageInput = document.getElementById('message');
+        let messageInput = document.querySelector('.chat-input input');
         let message = messageInput.value;
         let recipient = document.getElementById('recipient').value;
-    
+
         if (recipient) {
             socket.emit('message', { 'recipient': recipient, 'message': message });
         } else {
             alert('Please select a chat recipient');
         }
-    
+
         messageInput.value = '';
     };
-    
+
+    // Search for a user
     document.getElementById('search-button').onclick = () => {
         let username = document.getElementById('search-user').value;
         fetch('/search_user', {
@@ -59,7 +43,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             if (data.status === 'found') {
                 let userItem = document.createElement('div');
                 userItem.className = 'search-result';
-                
+
                 let userNameSpan = document.createElement('span');
                 userNameSpan.textContent = data.username;
 
@@ -81,6 +65,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     };
 
+    // Function to send a chat request
     function sendChatRequest(userId) {
         fetch('/send_chat_request', {
             method: 'POST',
@@ -96,6 +81,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
+    // Function to get chat requests
     function getChatRequests() {
         fetch('/get_chat_requests')
         .then(response => response.json())
@@ -121,6 +107,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
+    // Function to accept a chat request
     function acceptChatRequest(senderId) {
         fetch('/accept_chat_request', {
             method: 'POST',
@@ -137,6 +124,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
+    // Function to reject a chat request
     function rejectChatRequest(senderId) {
         fetch('/reject_chat_request', {
             method: 'POST',
@@ -152,6 +140,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
+    // Function to get accepted chats
     function getAcceptedChats() {
         fetch('/get_accepted_chats')
         .then(response => response.json())
@@ -168,11 +157,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
+    // Function to select a chat
     function selectChat(username) {
         document.getElementById('recipient').value = username;
         document.getElementById('recipient').readOnly = true;
         document.getElementById('chat').innerHTML = '';  // Clear previous messages
-    
+
         fetch('/get_messages', {
             method: 'POST',
             headers: {
@@ -184,25 +174,36 @@ document.addEventListener('DOMContentLoaded', (event) => {
         .then(messages => {
             let messagesDiv = document.getElementById('chat');
             messages.forEach(msg => {
-                let message = document.createElement('div');
-                message.className = 'chat-message';
-                if (msg.username === currentUser) {
-                    message.classList.add('sent');
-                }
-                let usernameSpan = document.createElement('span');
-                usernameSpan.className = 'username';
-                usernameSpan.textContent = msg.username + ': ';
-                let messageSpan = document.createElement('span');
-                messageSpan.className = 'message';
-                messageSpan.textContent = msg.content;
-                message.appendChild(usernameSpan);
-                message.appendChild(messageSpan);
-                messagesDiv.appendChild(message);
+                displayMessage(msg.username, msg.content);
             });
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;  // Auto-scroll to the bottom
         });
         document.getElementById('chat-header').textContent = `Chatting with ${username}`;
-    }    
+    }
+
+    // Function to display a message
+    function displayMessage(username, message) {
+        let messages = document.getElementById('chat');
+        let messageDiv = document.createElement('div');
+        messageDiv.className = 'chat-message';
+
+        let usernameSpan = document.createElement('span');
+        usernameSpan.className = 'username';
+        usernameSpan.textContent = username + ': ';
+
+        let messageSpan = document.createElement('span');
+        messageSpan.className = 'message';
+        messageSpan.textContent = message;
+
+        messageDiv.appendChild(usernameSpan);
+        messageDiv.appendChild(messageSpan);
+
+        if (username === currentUser) {
+            messageDiv.classList.add('sent');
+        }
+
+        messages.appendChild(messageDiv);
+        messages.scrollTop = messages.scrollHeight;  // Auto-scroll to the bottom
+    }
 
     // Initial load
     getChatRequests();
