@@ -30,16 +30,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     document.getElementById('send').onclick = () => {
-        let recipientInput = document.getElementById('recipient');
         let messageInput = document.getElementById('message');
-        let recipient = recipientInput.value;
         let message = messageInput.value;
-        if (recipient) {
-            socket.emit('message', { 'recipient': recipient, 'message': message });
-        } else {
-            alert('Please select a chat recipient');
+        if (message) {
+            socket.emit('message', { 'recipient': 'all', 'message': message }); // 'recipient' should be dynamically set
+            messageInput.value = '';
         }
-        messageInput.value = '';
     };
 
     document.getElementById('search-button').onclick = () => {
@@ -206,3 +202,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
     getChatRequests();
     getAcceptedChats();
 });
+/* last update : 7/17 1:39pm */ 
