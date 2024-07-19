@@ -194,21 +194,22 @@ def handle_disconnect():
 
 @socketio.on('message')
 def handle_message(data):
+    print(f"Received message: {data}")  # Add this line for debugging
     sender_id = session.get('user_id')
     sender_username = session.get('username')
     recipient_username = data.get('recipient')
     message = data.get('message')
-    
+
     receiver = User.query.filter_by(username=recipient_username).first()
     if receiver:
         new_message = Message(sender_id=sender_id, receiver_id=receiver.id, content=message)
         db.session.add(new_message)
         db.session.commit()
-        logging.debug(f'Message from {sender_id} to {receiver.id}: {message}')
-        
+
         # Emit the message to both sender and receiver rooms
         emit('message', {'username': sender_username, 'message': message}, room=receiver.id)
         emit('message', {'username': sender_username, 'message': message}, room=sender_id)
+
 
 if __name__ == '__main__':
     db.create_all()
