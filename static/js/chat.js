@@ -6,22 +6,42 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     socket.on('message', (data) => {
-        displayMessage(data.username, data.message);
+        let messages = document.getElementById('chat');
+        let message = document.createElement('div');
+        message.className = 'chat-message';
+
+        let usernameSpan = document.createElement('span');
+        usernameSpan.className = 'username';
+        usernameSpan.textContent = data.username + ': ';
+       
+        let messageSpan = document.createElement('span');
+        messageSpan.className = 'message';
+        messageSpan.textContent = data.message;
+
+        message.appendChild(usernameSpan);
+        message.appendChild(messageSpan);
+
+        if (data.username === currentUser) {
+            message.classList.add('sent');
+        }
+
+        messages.appendChild(message);
+        messages.scrollTop = messages.scrollHeight;  // Auto-scroll to the bottom
     });
 
     document.getElementById('send').onclick = () => {
+        let recipientInput = document.getElementById('recipient');
         let messageInput = document.getElementById('message');
+        let recipient = recipientInput.value;
         let message = messageInput.value;
-        let recipient = document.getElementById('recipient').value;
-
         if (recipient) {
             socket.emit('message', { 'recipient': recipient, 'message': message });
         } else {
             alert('Please select a chat recipient');
         }
-
         messageInput.value = '';
     };
+
 
     document.getElementById('search-button').onclick = () => {
         let username = document.getElementById('search-user').value;
