@@ -4,7 +4,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 import os
 from flask_socketio import SocketIO, emit, join_room, leave_room
-import logging
 
 # Load environment variables from .env file
 load_dotenv()
@@ -15,9 +14,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 socketio = SocketIO(app)
-
-# Configure logging
-logging.basicConfig(level=logging.DEBUG)
 
 # User model with email field
 class User(db.Model):
@@ -154,9 +150,7 @@ def save_message():
         message = Message(sender_id=sender_id, receiver_id=receiver.id, content=content)
         db.session.add(message)
         db.session.commit()
-        logging.debug(f'Message from {sender_id} to {receiver.id}: {content}')
         return jsonify({'status': 'Message saved'})
-    logging.debug('Recipient not found')
     return jsonify({'status': 'Recipient not found'})
 
 @app.route('/get_messages', methods=['POST'])
@@ -171,9 +165,7 @@ def get_messages():
             ((Message.sender_id == other_user.id) & (Message.receiver_id == user_id))
         ).order_by(Message.timestamp).all()
         message_list = [{'username': User.query.get(msg.sender_id).username, 'content': msg.content} for msg in messages]
-        logging.debug(f'Messages between {user_id} and {other_user.id}: {message_list}')
         return jsonify(message_list)
-    logging.debug('User not found')
     return jsonify({'status': 'User not found'})
 
 @socketio.on('connect')
@@ -194,26 +186,22 @@ def handle_disconnect():
 
 @socketio.on('message')
 def handle_message(data):
-    print(f"Received message: {data}")  # Add this line for debugging
     sender_id = session.get('user_id')
     sender_username = session.get('username')
     recipient_username = data.get('recipient')
     message = data.get('message')
-
+    
     receiver = User.query.filter_by(username=recipient_username).first()
     if receiver:
         new_message = Message(sender_id=sender_id, receiver_id=receiver.id, content=message)
         db.session.add(new_message)
         db.session.commit()
-
+        
         # Emit the message to both sender and receiver rooms
         emit('message', {'username': sender_username, 'message': message}, room=receiver.id)
         emit('message', {'username': sender_username, 'message': message}, room=sender_id)
-
 
 if __name__ == '__main__':
     db.create_all()
     port = int(os.environ.get('PORT', 5001))
     socketio.run(app, debug=True, host='0.0.0.0', port=port)
-
-# last editied on 7/18  10;37 pm 
