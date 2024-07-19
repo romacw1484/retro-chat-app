@@ -32,9 +32,11 @@
                 </div>
             </div>
             <div class="chat-content">
+                <!-- Hidden input for the recipient username -->
+                <input type="hidden" id="recipient">
                 <div id="chat" class="chat-messages"></div>
                 <div class="chat-input">
-                    <input type="text" placeholder="Type your message...">
+                    <input type="text" id="message" placeholder="Type your message...">
                     <button id="send" type="button">Send</button>
                 </div>
             </div>
@@ -46,5 +48,3 @@
     <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
 </body>
 </html>
-
-<!-- last updates 7/18   10;33 pm -->

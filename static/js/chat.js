@@ -1,13 +1,15 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    var socket = io.connect(window.location.protocol + '//' + document.domain + ':' + location.port);
 
     // Join the chat room when connected
     socket.on('connect', () => {
+        console.log('Connected to server');
         socket.emit('join', { 'username': currentUser });
     });
 
     // Handle incoming messages
     socket.on('message', (data) => {
+        console.log('Received message:', data);
         displayMessage(data.username, data.message);
     });
 
@@ -18,6 +20,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let recipient = document.getElementById('recipient').value;
 
         if (recipient) {
+            console.log('Sending message to', recipient, ':', message);
             socket.emit('message', { 'recipient': recipient, 'message': message });
         } else {
             alert('Please select a chat recipient');
@@ -86,6 +89,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         fetch('/get_chat_requests')
         .then(response => response.json())
         .then(data => {
+            console.log('Chat requests:', data);
             let chatRequests = document.getElementById('chat-requests');
             chatRequests.innerHTML = '';
             data.forEach(request => {
@@ -145,6 +149,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         fetch('/get_accepted_chats')
         .then(response => response.json())
         .then(data => {
+            console.log('Accepted chats:', data);
             let chatList = document.getElementById('chat-list');
             chatList.innerHTML = '';
             data.forEach(chat => {
@@ -159,6 +164,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Function to select a chat
     function selectChat(username) {
+        console.log('Selecting chat with', username);
         document.getElementById('recipient').value = username;
         document.getElementById('recipient').readOnly = true;
         document.getElementById('chat').innerHTML = '';  // Clear previous messages
@@ -172,6 +178,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         })
         .then(response => response.json())
         .then(messages => {
+            console.log('Messages:', messages);
             let messagesDiv = document.getElementById('chat');
             messages.forEach(msg => {
                 displayMessage(msg.username, msg.content);
