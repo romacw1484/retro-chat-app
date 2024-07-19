@@ -30,18 +30,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     document.getElementById('send').onclick = () => {
-        let recipientInput = document.getElementById('recipient');
         let messageInput = document.getElementById('message');
-        let recipient = recipientInput.value;
         let message = messageInput.value;
+        let recipient = document.getElementById('recipient').value;
+    
         if (recipient) {
             socket.emit('message', { 'recipient': recipient, 'message': message });
         } else {
             alert('Please select a chat recipient');
         }
+    
         messageInput.value = '';
     };
-
+    
     document.getElementById('search-button').onclick = () => {
         let username = document.getElementById('search-user').value;
         fetch('/search_user', {
@@ -171,6 +172,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('recipient').value = username;
         document.getElementById('recipient').readOnly = true;
         document.getElementById('chat').innerHTML = '';  // Clear previous messages
+    
         fetch('/get_messages', {
             method: 'POST',
             headers: {
@@ -200,7 +202,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             messagesDiv.scrollTop = messagesDiv.scrollHeight;  // Auto-scroll to the bottom
         });
         document.getElementById('chat-header').textContent = `Chatting with ${username}`;
-    }
+    }    
 
     // Initial load
     getChatRequests();
