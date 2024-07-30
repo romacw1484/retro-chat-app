@@ -5,3 +5,4 @@ Werkzeug==2.1.2
 python-dotenv
 flask_socketio
 gunicorn
+psycopg2-binary

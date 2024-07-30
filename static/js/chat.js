@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         messageInput.value = '';
     };
 
-
+    
     document.getElementById('search-button').onclick = () => {
         let username = document.getElementById('search-user').value;
         fetch('/search_user', {
