@@ -1,25 +1,30 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 import os
 from flask_socketio import SocketIO, emit, join_room, leave_room
+from flask_migrate import Migrate
 
 # Load environment variables from .env file
-load_dotenv()
+load_dotenv(find_dotenv())
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 # Parse the database URL from DATABASE_URL environment variable
-uri = os.getenv('DATABASE_URL')  # or other relevant config var
+uri = os.getenv('DATABASE_URL')
+print(f"Database URL: {uri}")  # Debugging line
 if uri and uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 socketio = SocketIO(app)
+
+# Rest of your app code..
 
 # User model with email field
 class User(db.Model):
@@ -53,7 +58,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
             session['user_id'] = user.id
-            session['username'] = user.username
+            session['username'] = user.username 
             return redirect(url_for('chat'))
         else:
             flash('Invalid credentials')
@@ -145,19 +150,27 @@ def get_accepted_chats():
     accepted_chats += [{'user_id': req.sender_id, 'username': User.query.get(req.sender_id).username} for req in received_requests]
     return jsonify(accepted_chats)
 
-@app.route('/save_message', methods=['POST'])
+@app.route('/save_message', methods=['POST'])  # Define the route and allowed methods
 def save_message():
-    data = request.get_json()
-    recipient_username = data['recipient']
-    content = data['message']
-    sender_id = session['user_id']
+    data = request.get_json()  # Get JSON data from the POST request
+    recipient_username = data['recipient']  # Extract the recipient's username from the data
+    content = data['message']  # Extract the message content from the data
+    sender_id = session['user_id']  # Get the sender's user ID from the session
+    print(f"Saving message from user_id {sender_id} to {recipient_username}: {content}")  # Debugging line to log message details
+    
+    # Find the receiver user object from the database based on the username
     receiver = User.query.filter_by(username=recipient_username).first()
-    if receiver:
+    
+    if receiver:  # If the receiver is found
+        # Create a new Message object with sender ID, receiver ID, and content
         message = Message(sender_id=sender_id, receiver_id=receiver.id, content=content)
-        db.session.add(message)
-        db.session.commit()
-        return jsonify({'status': 'Message saved'})
-    return jsonify({'status': 'Recipient not found'})
+        db.session.add(message)  # Add the message to the session
+        db.session.commit()  # Commit the session to save the message in the database
+        print("Message saved successfully")  # Debugging line to confirm message saving
+        return jsonify({'status': 'Message saved'})  # Return a JSON response indicating success
+    print("Recipient not found")  # Debugging line if recipient is not found
+    return jsonify({'status': 'Recipient not found'})  # Return a JSON response indicating recipient not found
+
 
 @app.route('/get_messages', methods=['POST'])
 def get_messages():
