@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')  # Set secret key for session management
 
 # Parse the database URL from DATABASE_URL environment variable
-uri = os.getenv('DATABASE_URL')
+uri = os.getenv('RAILWAY_DATABASE_URL')
 print(f"Database URL: {uri}")  # Debugging line to print database URL
 if uri and uri.startswith("postgres://"):  # Check if the URL starts with 'postgres://'
     uri = uri.replace("postgres://", "postgresql://", 1)  # Replace it with 'postgresql://'
