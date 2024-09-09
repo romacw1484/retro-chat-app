@@ -27,6 +27,7 @@ socketio = SocketIO(app)  # Initialize SocketIO with the app
 
 # Define User model
 class User(db.Model):
+    __tablename__ = 'users'  # Update table name if needed
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # Primary key with auto-increment
     username = db.Column(db.String(150), nullable=False, unique=True)  # Username column
     password = db.Column(db.String(150), nullable=False)  # Password column
