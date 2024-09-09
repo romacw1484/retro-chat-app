@@ -33,18 +33,18 @@ class User(db.Model):
     password = db.Column(db.String(150), nullable=False)  # Password column
     email = db.Column(db.String(150), nullable=False, unique=True)  # Email column
 
-# Define ChatRequest model
+# Define Chat Request model
 class ChatRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # Primary key
-    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Foreign key to user id
-    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Foreign key to user id
+    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Foreign key to users id
+    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Foreign key to users id
     status = db.Column(db.String(50), nullable=False, default='pending')  # Status column
 
 # Define Message model
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # Primary key
-    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Foreign key to user id
-    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Foreign key to user id
+    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Foreign key to users id
+    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Foreign key to users id
     content = db.Column(db.String(500), nullable=False)  # Content column
     timestamp = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())  # Timestamp column
 
