@@ -203,22 +203,26 @@ def handle_disconnect():
 @socketio.on('message')
 def handle_message(data):
     print(f"Received message: {data}")  # Debug statement to print received message
+    
     sender_id = session.get('user_id')  # Get sender id from session
     sender_username = session.get('username')  # Get sender username from session
     recipient_username = data.get('recipient')  # Get recipient username from data
-    message = data.get('message')  # Get message content from data
+    message_content = data.get('message')  # Get message content from data
     
     receiver = User.query.filter_by(username=recipient_username).first()  # Query receiver by username
+    
     if receiver:  # Check if receiver exists
-        new_message = Message(sender_id=sender_id, receiver_id=receiver.id, content=message)  # Create new message
+        new_message = Message(sender_id=sender_id, receiver_id=receiver.id, content=message_content)  # Create new message
         db.session.add(new_message)  # Add message to the session
         db.session.commit()  # Commit the session
         
-        print(f"Message saved: {message}")  # Debug statement to print saved message
+        print(f"Message saved: {message_content}")  # Debug statement to print saved message
         
         # Emit the message to both sender and receiver rooms
-        emit('message', {'username': sender_username, 'message': message}, room=receiver.id)  # Emit message to receiver room
-        emit('message', {'username': sender_username, 'message': message}, room=sender_id)  # Emit message to sender room
+        emit('message', {'username': sender_username, 'message': message_content}, room=receiver.id)  # Emit message to receiver room
+        emit('message', {'username': sender_username, 'message': message_content}, room=sender_id)  # Emit message to sender room
+    else:
+        print(f"Recipient {recipient_username} not found")
 
 if __name__ == '__main__':
     db.create_all()  # Create all database tables
