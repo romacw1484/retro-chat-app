@@ -35,6 +35,7 @@ class User(db.Model):
 
 # Define Chat Request model
 class ChatRequest(db.Model):
+    __tablename__ = 'chat_request'  # Explicitly match the table name from your database
     id = db.Column(db.Integer, primary_key=True)  # Primary key
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Foreign key to users id
     receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Foreign key to users id
