@@ -43,6 +43,7 @@ class ChatRequest(db.Model):
 
 # Define Message model
 class Message(db.Model):
+    __tablename__ = 'message'  # Explicitly match the table name from your database
     id = db.Column(db.Integer, primary_key=True)  # Primary key
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Foreign key to users id
     receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Foreign key to users id
@@ -155,14 +156,15 @@ def get_accepted_chats():
 
 @app.route('/save_message', methods=['POST'])
 def save_message():
-    data = request.get_json()  # Get JSON data from request
-    recipient_username = data['recipient']  # Get recipient username from JSON data
-    content = data['message']  # Get message content from JSON data
-    sender_id = session['user_id']  # Get sender id from session
+    data = request.get_json() # Get JSON data from request
+    recipient_username = data.get('recipient')  # Get recipient username from JSON data
+    content = data.get('message')  # Get message content from JSON data
+    print(f"Saving message to {recipient_username}: {content}")  # Add this line for debugging
+    sender_id = session['user_id'] # Get sender id from session
     receiver = User.query.filter_by(username=recipient_username).first()  # Query receiver by username
-    if receiver:  # Check if receiver exists
-        message = Message(sender_id=sender_id, receiver_id=receiver.id, content=content)  # Create new message
-        db.session.add(message)  # Add message to the session
+    if receiver: # Check if receiver exists
+        message = Message(sender_id=sender_id, receiver_id=receiver.id, content=content) # Create new message
+        db.session.add(message) # Add message to the session
         db.session.commit()  # Commit the session
         return jsonify({'status': 'Message saved'})  # Return message saved status
     return jsonify({'status': 'Recipient not found'})  # Return recipient not found status

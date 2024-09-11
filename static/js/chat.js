@@ -34,8 +34,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let messageInput = document.getElementById('message');
         let recipient = recipientInput.value;
         let message = messageInput.value;
+        console.log(`Sending message to ${recipient}: ${message}`);  // Add logging for debugging
         if (recipient) {
             socket.emit('message', { 'recipient': recipient, 'message': message });
+            console.log("Message emitted via SocketIO");  // Confirm message emission
         } else {
             alert('Please select a chat recipient');
         }
