@@ -18,11 +18,13 @@ This is the begining of the devlopment of Retro Chat App which I hope to eventua
   
 3. Registration/Sign-Up Page
 - Enable new users to create an account.
+<img width="1034" alt="Screenshot 2025-02-26 at 12 42 36 PM" src="https://github.com/user-attachments/assets/455cece6-7bb2-4496-bd38-ab94a733c504" />
 
 4. Chat Room Page
 - Provide the core chat functionality with a nostalgic interface
 - Input area for typing messages
 - Display of active users and/or channels
+<img width="1259" alt="Screenshot 2025-02-26 at 12 43 11 PM" src="https://github.com/user-attachments/assets/38f01935-5374-4a5f-bbc0-65bb47861fec" />
 
 5. Profile/Settings Page (Optional)
 - Allow users to view and edit their personal settings.
