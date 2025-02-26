@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    var socket = io.connect('https://' + document.domain + ':' + location.port);
+   // Let Socket.IO figure out the correct protocol (http:// or https://)
+    var socket = io({
+        transports: ['websocket']
+    });
+
+
 
     socket.on('connect', () => {
         socket.emit('join', { 'username': currentUser });
