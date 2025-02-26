@@ -1,12 +1,32 @@
-This is the begining of the devlopment of Retro Chat App which I hope to eventually build out 
+This is the begining of the devlopment of Retro Chat App which I hope to eventually build out into a basic functioning chat-application 
 **https://retro-chat-app-cb79717625e8.herokuapp.com**
 
-**Stage 1**  https://github.com/user-attachments/assets/7313909f-6d81-4c35-9548-15775ae1caf0
+<img width="852" alt="Screenshot 2025-02-26 at 10 49 39 AM" src="https://github.com/user-attachments/assets/10ae2040-779a-4a2d-9f7b-f2fc930dafe5" />
 
+**Stage 1 --- Build Basic Pages**  
 
+1. Landing/Home Page
+- Introduce users to the retro chat experience.
+- Brief description of application 
+- Options to log in or register
+  
+2. Login Page
+- Allow users to securely sign into their account.
+- Retro-styled input fields for username and password
+- “Forgot password” link (if applicable)
+- Error messages
+  
+3. Registration/Sign-Up Page
+- Enable new users to create an account.
 
+4. Chat Room Page
+- Provide the core chat functionality with a nostalgic interface
+- Input area for typing messages
+- Display of active users and/or channels
 
-
+5. Profile/Settings Page (Optional)
+- Allow users to view and edit their personal settings.
+- Edit personal info (e.g., username, display picture, status message)
 
 Notes:
 
