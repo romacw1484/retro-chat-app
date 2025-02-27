@@ -1,9 +1,27 @@
-This is the begining of the devlopment of Retro Chat App which I hope to eventually build out into a basic functioning chat-application 
-**https://retro-chat-app-cb79717625e8.herokuapp.com**
+# Retro Chat ---- **https://retro-chat-app-cb79717625e8.herokuapp.com**
+<img width="998" alt="Screenshot 2025-02-27 at 6 46 06 PM" src="https://github.com/user-attachments/assets/fc1b4ab2-09d6-448e-af38-73803a8edf1e" />
 
-<img width="852" alt="Screenshot 2025-02-26 at 10 49 39 AM" src="https://github.com/user-attachments/assets/10ae2040-779a-4a2d-9f7b-f2fc930dafe5" />
+Retro Chat is a nostalgic, real-time chat application that brings back the classic terminal chat experience. Enjoy a retro-themed interface with real-time messaging, user authentication, and a simple chat request system.
 
-**Stage 1 --- Build Basic Pages**  
+## Features
+
+- **Real-Time Messaging:** Chat with friends instantly using Socket.IO.
+- **User Authentication:** Secure login and signup forms with password hashing.
+- **Chat Requests:** Send, accept, or reject chat requests.
+- **Retro Interface:** Classic terminal-style design with a modern twist.
+
+## Technologies Used
+
+- **Flask** – Python web framework
+- **Flask-SocketIO** – Real-time communication
+- **Flask-Cors** – Handling cross-origin resource sharing
+- **Flask-SQLAlchemy** – ORM for database operations
+- **Flask-Migrate** – Database migrations
+- **PostgreSQL** – Database (hosted on Railway/Heroku)
+- **Gunicorn** – WSGI server for deployment
+- **HTML/CSS/JavaScript** – Front-end design
+
+## NOTES
 
 1. Landing/Home Page
 - Introduce users to the retro chat experience.
@@ -35,3 +53,7 @@ Notes:
  - when typing in user to request as friend, you must type their username in correctly 
  - working on some sort of capcha authenfication 
  
+
+
+
+
