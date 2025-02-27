@@ -1,4 +1,4 @@
-# Retro Chat ---- **https://retro-chat-app-cb79717625e8.herokuapp.com**
+# Retro Chat
 <img width="998" alt="Screenshot 2025-02-27 at 6 46 06 PM" src="https://github.com/user-attachments/assets/fc1b4ab2-09d6-448e-af38-73803a8edf1e" />
 
 Retro Chat is a nostalgic, real-time chat application that brings back the classic terminal chat experience. Enjoy a retro-themed interface with real-time messaging, user authentication, and a simple chat request system.
