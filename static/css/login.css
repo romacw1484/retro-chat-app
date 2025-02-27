@@ -1,16 +1,54 @@
+/* Body and overall background */
 body {
-    font-family: 'Courier New', Courier, monospace;
-    background-color: #feffab;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    background-color: #feffab;
+    font-family: 'Courier New', Courier, monospace;
 }
 
+/* 1) Main wrapper that holds everything and centers it */
+.main-wrapper {
+    display: flex;                /* Enables flexbox */
+    flex-direction: column;       /* Stack items vertically */
+    align-items: center;          /* Center items horizontally */
+    justify-content: center;      /* Center items vertically */
+    min-height: 100vh;            /* Fill the full viewport height */
+}
+
+/* Header Container */
+.header-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Retro Title */
+.retro-title {
+    font-size: 6rem;
+    margin: 0;
+    text-shadow: 2px 2px #fff; /* Subtle retro shadow */
+}
+
+.retro-text {
+    color: rgb(211, 104, 89); /* The red color from your screenshot */
+}
+
+.chat-text {
+    color: rgb(165, 202, 147); /* The green color from your screenshot */
+}
+
+/* Description text */
+.app-description {
+    font-size: 1rem;
+    color: #333;
+    max-width: 600px;
+    margin: 10px auto 0 auto;
+    line-height: 1.4;
+}
+
+/* Login Container */
 .login-container {
     width: 50%;
+    max-width: 500px;
     padding: 20px;
     border: 4px solid #8a8888;
     border-radius: 5px;
@@ -27,6 +65,7 @@ body {
     margin-bottom: 25px;
 }
 
+/* Floating Label Groups */
 .form__group {
     position: relative;
     padding: 15px 0 0;
@@ -34,8 +73,8 @@ body {
     width: 100%;
 }
 
+/* The actual input field */
 .form__field {
-    font-family: 'Courier New', Courier, monospace;
     width: 100%;
     border: 0;
     border-bottom: 2px solid #9b9b9b;
@@ -45,18 +84,22 @@ body {
     padding: 7px 0;
     background: transparent;
     transition: border-color 0.2s;
+    font-family: inherit; /* keep the same font as the container */
 }
 
+/* Placeholder hidden to let label float up */
 .form__field::placeholder {
     color: transparent;
 }
 
+/* When the placeholder is shown, the label is bigger and sits lower */
 .form__field:placeholder-shown ~ .form__label {
     font-size: 1.3rem;
     cursor: text;
     top: 20px;
 }
 
+/* The label itself */
 .form__label {
     position: absolute;
     top: 0;
@@ -64,10 +107,11 @@ body {
     transition: 0.2s;
     font-size: 1rem;
     color: #9b9b9b;
+    pointer-events: none; /* the label is clicked through to the input */
 }
 
+/* Focus styles */
 .form__field:focus {
-    padding-bottom: 6px;
     border-bottom: 2px solid #11998e;
 }
 
@@ -87,22 +131,26 @@ body {
     box-shadow: none;
 }
 
+/* Button styling */
 .login-container button {
     padding: 10px;
     border: 3px solid #000000;
     border-radius: 3px;
     background-color: #11998e;
     color: white;
-    cursor: cursor;
+    cursor: pointer;
     font-size: 16px;
+    margin-top: 15px;
 }
 
 .login-container button:hover {
-    background-color: #11998e
-} 
+    background-color: #0e7f73;
+}
 
+/* Signup link */
 .login-container a {
     margin-top: 10px;
     text-align: center;
     color: #11998e;
+    display: block;
 }
